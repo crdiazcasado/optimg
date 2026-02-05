@@ -1,0 +1,238 @@
+:root{
+    --bg:#f2f5f9;
+    --text:#3c3c3c;
+    --title:#3c3c3c;
+    --card:#ffffff;
+    --border:#e5e5e5;
+    --accent:#48CAFF;
+    --error:#ff4d4f;
+}
+
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    padding:32px;
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    background:var(--bg);
+    color:var(--text);
+    text-align:center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#card {
+    background: white;
+    border-radius: 10px;
+    border: #d8d8d8 solid 1px;
+    height: auto;
+    width: 410px;
+    padding: 30px;
+    display:flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#card .title {
+    padding-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width:100%;
+}
+
+h1{
+    margin: 0px 0px 4px;
+    font-size: 24px;
+    color:var(--title)
+}
+
+.size p {
+    color: #6c6c6c;
+    font-size: 13px;
+}
+
+.size {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+p{
+    margin:0 0 4px 0;
+    font-size:14px;
+    text-align: left;
+}
+
+.config {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#controls{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    gap:20px;
+    justify-content: space-between;
+    height: 100%;
+    border-bottom: 1px solid var(--border);
+}
+
+#controls input[type=number]{
+    padding:10px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    font-size:16px;
+    text-align:center;
+    width:100%;
+    outline:none;
+}
+
+#controls input[type=number]:focus{
+    border-color: var(--accent);
+}
+
+#controls input.error{
+    border-color: var(--error);
+}
+
+#controls input::placeholder{
+    opacity: 0.2;
+    color: #000;
+}
+
+#optimgCheckboxContainer{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+#optimgCheckbox{
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    display: inline-block;
+    position: relative;
+    transition: all 0.2s;
+}
+
+#optimgCheckbox.checked{
+    border-color: var(--accent);
+    background: var(--accent);
+}
+
+#optimgCheckbox.checked::after{
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 0px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+#optimgLabel{
+    font-size: 14px;
+    user-select: none;
+    color: var(--text);
+}
+
+#optimgCheckbox.disabled{
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+#dropzone{
+    max-width: 540px;
+    width: 350px;
+    height: 250px;
+    padding: 48px 20px;
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    color: var(--accent);
+    transition: opacity 0.4s;
+}
+
+#dropzone.active{
+    background:rgba(72,202,255,.08);
+}
+
+input[type=file]{
+    display:none;
+}
+
+#preview{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,220px);
+    gap:26px;
+    justify-content:center;
+    margin-top:40px;
+    max-width: 90%;
+}
+
+.preview-item{
+    background:var(--card);
+    border-radius:20px;
+    box-shadow:0 10px 24px rgba(0,0,0,.08);
+    border:1px solid var(--border);
+}
+
+.preview-frame{
+    width:100%;
+    aspect-ratio:1/1;
+    background:#fff;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+}
+
+.preview-frame img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+}
+
+#actions{
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+button{
+    border:none;
+    background:var(--accent);
+    color:white;
+    cursor:pointer;
+    padding: 9px;
+    border-radius: 30px;
+    font-size: 14px;
+    width:110px;
+    display: none;
+}
+button.secondary{
+    background:none;
+    color:var(--accent);
+    border:1px solid var(--accent);
+}
