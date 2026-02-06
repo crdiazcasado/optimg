@@ -206,7 +206,6 @@ async function processFiles(files){
         dz.style.display = "none";
         downloadBtn.style.display = "inline-block";
         clearBtn.style.display = "inline-block";
-        controls.style.borderBottom = "none";
         updateSizeInputState();
     }
 }
@@ -230,7 +229,6 @@ function resetAll(clearPreview=true){
     dz.style.display="flex";
     downloadBtn.style.display = "none";
     clearBtn.style.display = "none";
-    controls.style.borderBottom="1px solid var(--border)";
     updateDropzoneOpacity();
     updateSizeInputState();
     fi.value = ""; 
