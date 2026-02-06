@@ -6,9 +6,34 @@ const clearBtn = document.getElementById("clearBtn");
 const sizeInput = document.getElementById("sizeInput");
 const controls = document.getElementById("controls");
 const actions = document.getElementById("actions");
+const customNameInput = document.getElementById("customNameInput");
+const keepNameContent = document.getElementById("keepNameContent");
+const customNameContent = document.getElementById("customNameContent");
 
 const optimgCheckbox = document.getElementById("optimgCheckbox");
+const optimgCheckboxContainer = document.getElementById("optimgCheckboxContainer");
 let optimgChecked = false;
+
+// Radio buttons
+const radioKeep = document.querySelector('input[name="naming"][value="keep"]');
+const radioCustom = document.querySelector('input[name="naming"][value="custom"]');
+
+// Mostrar/ocultar contenido según la opción seleccionada
+function updateNamingContent() {
+    if (radioCustom.checked) {
+        keepNameContent.style.display = "none";
+        customNameContent.style.display = "block";
+    } else {
+        keepNameContent.style.display = "block";
+        customNameContent.style.display = "none";
+    }
+}
+
+radioKeep.addEventListener("change", updateNamingContent);
+radioCustom.addEventListener("change", updateNamingContent);
+
+// Inicializar el estado visual
+updateNamingContent();
 
 function updateCheckboxState(){
     if(sizeInput.disabled){
@@ -18,7 +43,9 @@ function updateCheckboxState(){
     }
 }
 
-optimgCheckbox.addEventListener("click", () => {
+// Event listener para el checkbox y su container
+optimgCheckboxContainer.addEventListener("click", (e) => {
+    e.stopPropagation(); // Prevenir que el click se propague
     if(sizeInput.disabled) return;
     optimgChecked = !optimgChecked;
     if(optimgChecked) optimgCheckbox.classList.add("checked");
@@ -126,7 +153,6 @@ async function processFiles(files){
     for(const file of files){
         const img = await loadImage(file);
 
-        // Canvas original con la imagen
         const c = document.createElement("canvas");
         c.width = img.width;
         c.height = img.height;
@@ -135,7 +161,6 @@ async function processFiles(files){
         ctx.imageSmoothingQuality = "high";
         ctx.drawImage(img,0,0);
 
-        // Detectar bounding box (eliminar fondo blanco)
         const d = ctx.getImageData(0,0,c.width,c.height).data;
         let top=0,bottom=c.height-1,left=0,right=c.width-1;
 
@@ -159,11 +184,9 @@ async function processFiles(files){
         while(left<right&&!col(left))left++;
         while(right>left&&!col(right))right--;
 
-        // Dimensiones del contenido recortado
         const cropWidth = right - left + 1;
         const cropHeight = bottom - top + 1;
         
-        // Crear canvas cuadrado del tamaño del lado más grande
         const squareSize = Math.max(cropWidth, cropHeight);
         const square = document.createElement("canvas");
         square.width = squareSize;
@@ -172,16 +195,13 @@ async function processFiles(files){
         sqCtx.imageSmoothingEnabled = true;
         sqCtx.imageSmoothingQuality = "high";
         
-        // Fondo blanco
         sqCtx.fillStyle = "#fff";
         sqCtx.fillRect(0,0,squareSize,squareSize);
         
-        // Centrar la imagen recortada en el canvas cuadrado
         const offsetX = (squareSize - cropWidth) / 2;
         const offsetY = (squareSize - cropHeight) / 2;
         sqCtx.drawImage(c, left, top, cropWidth, cropHeight, offsetX, offsetY, cropWidth, cropHeight);
 
-        // Crear canvas de salida con el tamaño final
         const out = document.createElement("canvas");
         out.width = outputSize;
         out.height = outputSize;
@@ -189,7 +209,6 @@ async function processFiles(files){
         o.imageSmoothingEnabled = true;
         o.imageSmoothingQuality = "high";
         
-        // Redimensionar el canvas cuadrado al tamaño de salida
         o.drawImage(square, 0, 0, outputSize, outputSize);
 
         const blob = await canvasToBlob(out);
@@ -213,13 +232,34 @@ async function processFiles(files){
 }
 
 function downloadAll(){
-    results.forEach(r=>{
+    const useCustomName = radioCustom.checked;
+    const customName = customNameInput.value.trim();
+    
+    results.forEach((r, index) => {
+        let finalName;
+        let ext;
+        
         let dotIndex = r.name.lastIndexOf(".");
-        let base = dotIndex !== -1 ? r.name.slice(0,dotIndex) : r.name;
-        let ext = dotIndex !== -1 ? r.name.slice(dotIndex) : ".jpg";
+        ext = dotIndex !== -1 ? r.name.slice(dotIndex) : ".jpg";
+        
+        if (useCustomName && customName) {
+            if (results.length > 1) {
+                finalName = `${customName}-${index + 1}`;
+            } else {
+                finalName = customName;
+            }
+        } else {
+            let base = dotIndex !== -1 ? r.name.slice(0, dotIndex) : r.name;
+            finalName = base;
+            
+            if (optimgChecked) {
+                finalName += "-optimg";
+            }
+        }
+        
         const a = document.createElement("a");
         a.href = r.previewUrl;
-        a.download = optimgChecked ? `${base}-optimg${ext}` : `${base}${ext}`;
+        a.download = `${finalName}${ext}`;
         a.click();
     });
 }
