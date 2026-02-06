@@ -5,6 +5,7 @@ const downloadBtn = document.getElementById("downloadBtn");
 const clearBtn = document.getElementById("clearBtn");
 const sizeInput = document.getElementById("sizeInput");
 const controls = document.getElementById("controls");
+const actions = document.getElementById("actions");
 
 const optimgCheckbox = document.getElementById("optimgCheckbox");
 let optimgChecked = false;
@@ -204,6 +205,7 @@ async function processFiles(files){
 
     if(results.length){
         dz.style.display = "none";
+        actions.style.display = "flex";
         downloadBtn.style.display = "inline-block";
         clearBtn.style.display = "inline-block";
         updateSizeInputState();
@@ -227,6 +229,7 @@ function resetAll(clearPreview=true){
     results=[];
     if(clearPreview) pv.innerHTML="";
     dz.style.display="flex";
+    actions.style.display = "none";
     downloadBtn.style.display = "none";
     clearBtn.style.display = "none";
     updateDropzoneOpacity();
