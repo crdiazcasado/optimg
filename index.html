@@ -6,30 +6,22 @@
 <title>Optimizador de imágenes</title>
 <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
 <div id="card">
+    <div class="title">
+        <h1>Optimizador de imágenes</h1>
+        <p>Aspect ratio fijo de 1:1 · Tamaño configurable</p>
+    </div>
+    
     <div class="config">
-        <div class="title">
-            <h1>Optimizador de imágenes</h1>
-            <p>Aspect ratio fijo de 1:1 · Tamaño configurable</p>
-        </div>
-
         <div id="controls">
             <div class="size">
                 <p>Tamaño final (px):</p>
                 <input id="sizeInput" type="number" min="50" max="5000" placeholder="Ej. 200px">
-
-                <div id="optimgCheckboxContainer">
-                    <div id="optimgCheckbox"></div>
-                    <label id="optimgLabel">Añadir -optimg al nombre</label>
-                </div>
             </div>
-
-            <div id="actions">
-                <button id="downloadBtn" onclick="downloadAll()">Descargar</button>
-                <button id="clearBtn" class="secondary" onclick="resetAll()">Limpiar</button>
+            <div id="optimgCheckboxContainer">
+                <div id="optimgCheckbox"></div>
+                <label id="optimgLabel">Añadir -optimg al nombre</label>
             </div>
         </div>
     </div>
@@ -38,8 +30,12 @@
         <strong>Carga archivos</strong>
         o arrastra y suelta aquí
     </div>
-
     <input id="fileInput" type="file" multiple accept="image/*">
+    
+    <div id="actions">
+        <button id="downloadBtn" onclick="downloadAll()">Descargar</button>
+        <button id="clearBtn" class="secondary" onclick="resetAll()">Limpiar</button>
+    </div>
 </div>
 
 <div id="preview"></div>
