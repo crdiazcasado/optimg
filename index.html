@@ -18,25 +18,44 @@
             <p>Tamaño final (px):</p>
             <input id="sizeInput" type="number" min="50" max="5000" placeholder="Ej. 200px">
         </div>
-        <div id="optimgCheckboxContainer">
-            <div id="optimgCheckbox"></div>
-            <label id="optimgLabel">Añadir -optimg al nombre</label>
+        
+        <div id="namingConfig">
+            <div class="naming-card">
+                <label class="radio-option">
+                    <input type="radio" name="naming" value="keep" checked>
+                    <span>Mantener nombre original</span>
+                </label>
+                
+                <div class="option-content" id="keepNameContent">
+                    <div id="optimgCheckboxContainer">
+                        <div id="optimgCheckbox"></div>
+                        <label id="optimgLabel">Añadir -optimg al nombre</label>
+                    </div>
+                </div>
+                
+                <label class="radio-option">
+                    <input type="radio" name="naming" value="custom">
+                    <span>Cambiar nombre</span>
+                </label>
+                
+                <div class="option-content" id="customNameContent" style="display:none">
+                    <input type="text" id="customNameInput" placeholder="Nuevo nombre (sin extensión)">
+                </div>
+            </div>
         </div>
+        
         <div id="actions">
             <button id="downloadBtn" onclick="downloadAll()">Descargar</button>
             <button id="clearBtn" class="secondary" onclick="resetAll()">Limpiar</button>
         </div>
     </div>
-
     <div id="dropzone">
         <strong>Carga archivos</strong>
         o arrastra y suelta aquí
     </div>
     <input id="fileInput" type="file" multiple accept="image/*">
 </div>
-
 <div id="preview"></div>
-
 <script src="script.js"></script>
 </body>
 </html>
