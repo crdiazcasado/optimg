@@ -120,11 +120,12 @@ async function processFiles(files){
     if(!isValidSize()) return;
 
     const outputSize = parseInt(sizeInput.value);
-    updateSizeInputState(); // deshabilitar mientras haya contenido
+    updateSizeInputState();
 
     for(const file of files){
         const img = await loadImage(file);
 
+        // Canvas original con la imagen
         const c = document.createElement("canvas");
         c.width = img.width;
         c.height = img.height;
@@ -133,6 +134,7 @@ async function processFiles(files){
         ctx.imageSmoothingQuality = "high";
         ctx.drawImage(img,0,0);
 
+        // Detectar bounding box (eliminar fondo blanco)
         const d = ctx.getImageData(0,0,c.width,c.height).data;
         let top=0,bottom=c.height-1,left=0,right=c.width-1;
 
@@ -156,21 +158,38 @@ async function processFiles(files){
         while(left<right&&!col(left))left++;
         while(right>left&&!col(right))right--;
 
-        const w = right - left + 1;
-        const h = bottom - top + 1;
-        const size = Math.max(w,h);
-        const cx = left + w/2 - size/2;
-        const cy = top + h/2 - size/2;
+        // Dimensiones del contenido recortado
+        const cropWidth = right - left + 1;
+        const cropHeight = bottom - top + 1;
+        
+        // Crear canvas cuadrado del tamaño del lado más grande
+        const squareSize = Math.max(cropWidth, cropHeight);
+        const square = document.createElement("canvas");
+        square.width = squareSize;
+        square.height = squareSize;
+        const sqCtx = square.getContext("2d");
+        sqCtx.imageSmoothingEnabled = true;
+        sqCtx.imageSmoothingQuality = "high";
+        
+        // Fondo blanco
+        sqCtx.fillStyle = "#fff";
+        sqCtx.fillRect(0,0,squareSize,squareSize);
+        
+        // Centrar la imagen recortada en el canvas cuadrado
+        const offsetX = (squareSize - cropWidth) / 2;
+        const offsetY = (squareSize - cropHeight) / 2;
+        sqCtx.drawImage(c, left, top, cropWidth, cropHeight, offsetX, offsetY, cropWidth, cropHeight);
 
+        // Crear canvas de salida con el tamaño final
         const out = document.createElement("canvas");
         out.width = outputSize;
         out.height = outputSize;
         const o = out.getContext("2d");
         o.imageSmoothingEnabled = true;
         o.imageSmoothingQuality = "high";
-        o.fillStyle = "#fff";
-        o.fillRect(0,0,outputSize,outputSize);
-        o.drawImage(c,cx,cy,size,size,0,0,outputSize,outputSize);
+        
+        // Redimensionar el canvas cuadrado al tamaño de salida
+        o.drawImage(square, 0, 0, outputSize, outputSize);
 
         const blob = await canvasToBlob(out);
         const previewUrl = URL.createObjectURL(blob);
